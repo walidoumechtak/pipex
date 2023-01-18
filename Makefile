@@ -3,6 +3,12 @@ CFLAGS=-Wall -Wextra -Werror
 NAME=pipex
 
 OBJ=pipex.o \
+	helped_functions/ft_split.o \
+	helped_functions/ft_strdup.o \
+	helped_functions/ft_strjoin.o \
+	helped_functions/ft_strlen.o \
+	helped_functions/ft_substr.o \
+
 
 all:$(NAME)
 
@@ -10,7 +16,7 @@ $(NAME):$(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 clean:
-	rm -f $(NAME)
+	rm -f $(NAME) $(OBJ)
 
 fclean:
 	rm -f $(NAME) $(OBJ)
