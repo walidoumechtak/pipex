@@ -13,10 +13,10 @@ OBJ=pipex.o \
 all:$(NAME)
 
 $(NAME):$(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -fsanitize=address
 
 clean:
-	rm -f $(NAME) $(OBJ)
+	rm -f $(OBJ)
 
 fclean:
 	rm -f $(NAME) $(OBJ)

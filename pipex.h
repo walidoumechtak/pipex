@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:23:03 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/19 09:04:20 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/19 13:21:45 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_pipe
     int fd_infile;
     int pid;
     int stdout_copy;
+    int stdin_copy;
     char **cmd1;
     char **cmd2;
     char *path_cmd1;
@@ -39,5 +40,7 @@ char	*ft_strdup(const char *s1);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlen(const	char *s);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+char *ft_strcat(char *s1, char *s2);
+
 
 #endif
