@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:22:35 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/19 16:23:36 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/19 20:20:03 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,26 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 		perror("command not found");
 }
 
+void	dup_and_execev(t_pipe *ptr, int n, char **env)
+{
+	if (n == 1)
+	{
+		close(ptr->fd[0]);
+		dup2(ptr->fd_infile, 0);
+		dup2(ptr->fd[1], 1);
+		execve(ptr->path_cmd1, ptr->cmd1, env);
+		close(ptr->fd[1]);
+	}
+	else
+	{
+		close(ptr->fd[1]);
+		dup2(ptr->fd[0], 0);
+		dup2(ptr->fd_outfile, 1);
+		execve(ptr->path_cmd2, ptr->cmd2, env);
+		close(ptr->fd[0]);
+	}
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_pipe	*ptr;
@@ -112,19 +132,11 @@ int	main(int ac, char **av, char **env)
 		ptr->pid = fork();
 		if (ptr->pid == 0)
 		{
-			close(ptr->fd[0]);
-			dup2(ptr->fd_infile, 0);
-			dup2(ptr->fd[1], 1);
-			execve(ptr->path_cmd1, ptr->cmd1, env);
-			close(ptr->fd[1]);
+			dup_and_execev(ptr, 1, env);
 		}
 		else
 		{
-			close(ptr->fd[1]);
-			dup2(ptr->fd[0], 0);
-			dup2(ptr->fd_outfile, 1);
-			execve(ptr->path_cmd2, ptr->cmd2, env);
-			close(ptr->fd[0]);
+			dup_and_execev(ptr, 2, env);
 		}
 		while (wait(NULL) != -1)
 			;
