@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:22:35 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/18 14:38:45 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/19 09:05:41 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,63 +31,76 @@ void    free_all(char **s)
     free(s);
 }
 
+char    *remove_equal_from_path(char *str)
+{
+    char    **arr;
+    char    *res;
+    
+    arr = ft_split(str, '=');
+    res = ft_strjoin(res, arr[1]);
+    free_all(arr);
+    return (res);
+}
+
+char    **get_cmd_from_input(char *str)
+{
+    char    **arr;
+    char *
+    arr = ft_split(str, ' ');
+    return (arr);
+}
+
 char *path_cmd(char *str, char *cmd)
 {
     int i;
     char **p;
-    char *r;
+    char *res;
+    char *removed_equal;
+    char *joined;
 
-    p = ft_split(str, ':');
+    removed_equal = remove_equal_from_path(str);
+    p = ft_split(removed_equal, ':');
     i = 0;
     while (p[i])
     {
-        if (access(p[i], F_OK) == 0)
+        joined = ft_strjoin(p[i], cmd);
+        if (access(joined, F_OK) == 0)
         {
-            r = p[i];
+            res = joined;
             free_all(p);
-            return (r);
+            return (res);
         }
         i++;
     }
-    if (access(p[0], F_OK) == 0)
-    {
-        r =   p[i];
-        free_all(p);
-        return (r);  
-    }
-    free_all(p);
-    return (NULL);
+    free(removed_equal);
+    return (free_all(p), NULL);
 }
 
 int main(int ac, char **av, char **env)
 {
-    int fd[2];
-    int fd_outfile;
-    int fd_infile;
-    int pid;
-    int stdout_copy;
-    char **cmd1;
+    t_pipe  *ptr;
 
-    cmd1 = cmd1(av[2], env);
-    if (!path)
-        ft_perror();
-    if (pipe(fd) < 0)
+    ptr->cmd1 = get_cmd_from_input(av[2]);
+    ptr->cmd2 = get_cmd_from_input(av[3]);
+    ptr->path_cmd1 = path_cmd(env[6], ptr->cmd1[0]);
+    ptr->path_cmd1 = path_cmd(env[6], ptr->cmd2[0]);
+    if (pipe(ptr->fd) < 0)
         return (1);
-    stdout_copy = dup(1);
+    ptr->stdout_copy = dup(1);
     if (ac == 5)
     {
-        pid = fork();
-        if (pid == 0)
+        ptr->pid = fork();
+        if (ptr->pid == 0)
         {
-            fd_infile = open(av[1], O_RDONLY);
-            if (fd_infile == -1)
+            ptr->fd_infile = open(av[1], O_RDONLY);
+            if (ptr->fd_infile == -1)
                 ft_perror();
             
             
         }
         else
         {
-            fd_outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC);
+            ptr->fd_outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC);
         }
     }
     else
