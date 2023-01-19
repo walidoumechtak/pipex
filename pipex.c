@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:22:35 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/19 14:29:39 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/19 16:10:40 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ int main(int ac, char **av, char **env)
     ptr->path_cmd2 = path_cmd(env[6], ptr->cmd2[0]);
     ptr->fd_outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
     ptr->fd_infile = open(av[1], O_RDONLY);
-
+     if (ptr->fd_infile == -1)
+        ft_perror();
     if (ptr->path_cmd2 == NULL)
         perror("command not found");
     if (pipe(ptr->fd) < 0)
@@ -105,8 +106,7 @@ int main(int ac, char **av, char **env)
         {
             close(ptr->fd[0]);
             
-            if (ptr->fd_infile == -1)
-                ft_perror();
+           
             dup2(ptr->fd_infile, 0);
             dup2(ptr->fd[1], 1);
             execve(ptr->path_cmd1, ptr->cmd1, NULL);
@@ -118,12 +118,13 @@ int main(int ac, char **av, char **env)
             dup2(ptr->fd[0], 0);
             dup2(ptr->fd_outfile, 1);
             execve(ptr->path_cmd2, ptr->cmd2, NULL);
-            // close(ptr->fd[0]);
+            close(ptr->fd[0]);
         }
         while (wait(NULL) != -1);
     }
     else
         printf("to many argements !\n");
+    free(ptr);
 }
 
 

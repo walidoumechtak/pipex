@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:23:03 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/19 13:21:45 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/19 16:07:20 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <time.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/errno.h>
 #include <sys/wait.h>
 #include <fcntl.h>
 
