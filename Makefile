@@ -8,6 +8,10 @@ OBJ=pipex.o \
 	helped_functions/ft_strjoin.o \
 	helped_functions/ft_strlen.o \
 	helped_functions/ft_substr.o \
+	helped_functions/free_all.o \
+	helped_functions/remove_equal_from_path.o \
+	helped_functions/get_cmd_from_input.o \
+	helped_functions/path_cmd.o \
 
 
 all:$(NAME)

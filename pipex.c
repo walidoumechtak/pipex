@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:22:35 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/19 20:20:03 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/19 20:28:37 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,68 +16,6 @@ void	ft_perror(void)
 {
 	perror("Failed to open file");
 	exit(0);
-}
-
-void	free_all(char **s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		free(s[i]);
-		i++;
-	}
-	free(s);
-}
-
-char	*remove_equal_from_path(char *str)
-{
-	char	**arr;
-	char	*res;
-
-	res = NULL;
-	arr = ft_split(str, '=');
-	res = ft_strjoin(res, arr[1]);
-	free_all(arr);
-	return (res);
-}
-
-char	**get_cmd_from_input(char *str)
-{
-	char	**arr;
-
-	arr = ft_split(str, ' ');
-	return (arr);
-}
-
-char	*path_cmd(char *str, char *cmd)
-{
-	int		i;
-	char	**p;
-	char	*res;
-	char	*removed_equal;
-	char	*joined;
-	char	*temp;
-
-	removed_equal = remove_equal_from_path(str);
-	p = ft_split(removed_equal, ':');
-	i = 0;
-	while (p[i])
-	{
-		temp = ft_strjoin(p[i], "/");
-		joined = ft_strjoin(temp, cmd);
-		free(temp);
-		if (access(joined, F_OK) == 0)
-		{
-			res = joined;
-			free_all(p);
-			return (res);
-		}
-		i++;
-	}
-	free(removed_equal);
-	return (free_all(p), NULL);
 }
 
 void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
@@ -131,13 +69,9 @@ int	main(int ac, char **av, char **env)
 		pipe(ptr->fd);
 		ptr->pid = fork();
 		if (ptr->pid == 0)
-		{
 			dup_and_execev(ptr, 1, env);
-		}
 		else
-		{
 			dup_and_execev(ptr, 2, env);
-		}
 		while (wait(NULL) != -1)
 			;
 	}

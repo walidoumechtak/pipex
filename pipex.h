@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:23:03 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/19 16:21:50 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/19 20:27:01 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,9 @@ char		*ft_strjoin(char const *s1, char const *s2);
 size_t		ft_strlen(const char *s);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		*ft_strcat(char *s1, char *s2);
+void	free_all(char **s);
+char	*remove_equal_from_path(char *str);
+char	**get_cmd_from_input(char *str);
+char	*path_cmd(char *str, char *cmd);
 
 #endif
