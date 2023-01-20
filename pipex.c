@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:22:35 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/19 20:28:37 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/20 16:14:55 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ int	main(int ac, char **av, char **env)
 	init_struct_elem(ptr, ac, av, env);
 	if (pipe(ptr->fd) < 0)
 		return (1);
-	ptr->stdout_copy = dup(1);
-	ptr->stdin_copy = dup(0);
 	if (ac == 5)
 	{
 		pipe(ptr->fd);

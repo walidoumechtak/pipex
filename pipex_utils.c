@@ -6,16 +6,8 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 10:58:07 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/18 16:23:14 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/20 05:55:10 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-char    **cmd1(char *cd1, char **env)
-{
-    char **s;
-    
-    s = ft_split(cd1, ' ');
-       
-}
