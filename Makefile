@@ -12,11 +12,25 @@ OBJ=pipex.o \
 	get_next_line/get_next_line.o \
 	get_next_line/get_next_line_utils.o \
 
+OBJS=bonus_part/pipe_bonus.o \
+	helped_functions/ft_split.o \
+	helped_functions/ft_substr.o \
+	helped_functions/free_all.o \
+	helped_functions/remove_equal_from_path.o \
+	helped_functions/get_cmd_from_input.o \
+	helped_functions/path_cmd.o \
+	helped_functions/fd_put_string.o \
+	helped_functions/ft_strcmp.o \
+	get_next_line/get_next_line.o \
+	get_next_line/get_next_line_utils.o \
 
 all:$(NAME)
 
 $(NAME):$(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -fsanitize=address
+
+bonus: $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
 	rm -f $(OBJ)
