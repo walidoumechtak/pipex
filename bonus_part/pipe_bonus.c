@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:21:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/23 13:04:16 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/23 13:32:29 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 	if (ft_strcmp(av[1], "here_doc") == 0)
 	{
 		ptr->fd_outfile = open(av[5], O_WRONLY | O_CREAT | O_APPEND, 0777);
-		ptr->fd_temp_file = open("temp", O_WRONLY | O_CREAT, 0777);
-		if (ptr->fd_temp_file == -1 && ac == 6)
+		ptr->fd_infile = open("temp", O_WRONLY | O_CREAT, 0777);
+		if (ptr->fd_infile == -1 && ac == 6)
 			ft_perror();
 	}
 	else
@@ -50,7 +50,7 @@ void	dup_and_execev(t_pipe *ptr, int n, char **env)
 	if (n == 1)
 	{
 		close(ptr->fd[0]);
-		dup2(ptr->fd_temp_file, 0);
+		dup2(ptr->fd_infile, 0);
 		dup2(ptr->fd[1], 1);
 		execve(ptr->path_cmd1, ptr->cmd1, env);
 		close(ptr->fd[1]);
@@ -80,7 +80,7 @@ void	read_here_doc(t_pipe *ptr, char **av)
 		if (ft_strcmp(arr[0], av[2]) == 0)
 			break;
 		free_all(arr);
-		fd_put_string(ptr->line, ptr->fd_temp_file);
+		fd_put_string(ptr->line, ptr->fd_infile);
 		free(ptr->line);
 		write(1, "pipe heredoc> ", 15);
 		ptr->line = get_next_line(0);
@@ -95,8 +95,8 @@ void	here_doc(t_pipe *ptr, int ac, char **av, char **env)
 			return ;
 		pipe(ptr->fd);
 		read_here_doc(ptr, av);
-		close(ptr->fd_temp_file);
-		ptr->fd_temp_file = open("temp", O_RDONLY);
+		close(ptr->fd_infile);
+		ptr->fd_infile = open("temp", O_RDONLY);
 		ptr->pid = fork();
 		if (ptr->pid == 0)
 		{
@@ -114,7 +114,13 @@ void	here_doc(t_pipe *ptr, int ac, char **av, char **env)
 
 // void	multiple_pipe(t_pipe *ptr, int ac, char **av, char **env)
 // {
-	
+// 	int	i;
+
+// 	i = 1;
+// 	while (i < ac)
+// 	{
+		
+// 	}
 // }
 
 int	main(int ac, char **av, char **env)
@@ -126,10 +132,10 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	if (ft_strcmp(av[1], "here_doc") == 0 && ac == 6)
 		here_doc(ptr, ac, av, env);
-	else
-	{
-		if (ac >= 5)
-			multiple_pipe(ptr, ac, av, env);
-	}
+	// else
+	// {
+	// 	if (ac >= 5)
+	// 		multiple_pipe(ptr, ac, av, env);
+	// }
 	free(ptr);
 }
