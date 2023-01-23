@@ -33,10 +33,10 @@ bonus: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJ) $(OBJS)
 
 fclean:
-	rm -f $(NAME) $(OBJ)
+	rm -f $(NAME) $(OBJ) $(OBJS)
 
 re:fclean all
 
