@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:23:03 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/23 06:51:36 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/23 15:24:59 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_pipe
 	char	*path_cmd1;
 	char	*path_cmd2;
 	char	*line;
-
+	int	i;
 }			t_pipe;
 
 char		**ft_split(char const *s, char c);
