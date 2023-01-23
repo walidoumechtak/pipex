@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:21:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/23 07:05:54 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/23 08:14:44 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,17 @@ void	dup_and_execev(t_pipe *ptr, int n, char **env)
 
 void	here_doc(t_pipe *ptr, char **av)
 {
+	char **arr;
+
 	ptr->line = get_next_line(0);
 	if (!ptr->line)
 		return ;
 	while (ptr->line)
 	{
-		if (ft_strcmp(ptr->line, av[2]) == 0)
+		arr = ft_split(ptr->line, '\n');
+		if (ft_strcmp(arr[0], av[2]) == 0)
 			break;
+		free_all(arr);
 		fd_put_string(ptr->line, ptr->fd_temp_file);
 		free(ptr->line);
 		ptr->line = get_next_line(0);
@@ -77,7 +81,6 @@ int	main(int ac, char **av, char **env)
 	ptr = malloc(sizeof(t_pipe));
 	if (!ptr)
 		return (1);
-	
 	if (ft_strcmp(av[1], "here_doc") == 0 && ac == 6)
 	{
 		init_struct_elem(ptr, ac, av, env);
@@ -93,5 +96,6 @@ int	main(int ac, char **av, char **env)
 		while (wait(NULL) != -1)
 			;
 	}
+	unlink("temp");
 	free(ptr);
 }
