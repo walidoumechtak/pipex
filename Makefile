@@ -27,10 +27,10 @@ OBJS=bonus_part/pipe_bonus.o \
 all:$(NAME)
 
 $(NAME):$(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -fsanitize=address
+	$(CC) $(CFLAGS) $(OBJ) ft_printf/libftprintf.a -o $(NAME) -fsanitize=address
 
 bonus: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) ft_printf/libftprintf.a -o $(NAME)
 
 clean:
 	rm -f $(OBJ) $(OBJS)

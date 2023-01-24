@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:22:35 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/20 16:14:55 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/24 11:47:00 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,17 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 	if (ptr->fd_infile == -1 && ac == 5)
 		ft_perror();
 	if (ptr->path_cmd2 == NULL && ac == 5)
-		perror("command not found");
+	{
+		ft_printf("commande not found : %s\n", ptr->cmd2[0]);
+		if (ptr->path_cmd1 != NULL)
+			exit (1);
+	}
+	if (ptr->path_cmd2 == NULL && ptr->path_cmd1 == NULL && ac == 5)	
+	{
+		ft_printf("commande not found : %s", ptr->cmd1[0]);
+		exit (1);
+	}
+	
 }
 
 void	dup_and_execev(t_pipe *ptr, int n, char **env)

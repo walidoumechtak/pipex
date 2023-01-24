@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:23:03 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/23 15:24:59 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/24 11:41:36 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PIPEX_H
 
 # include "get_next_line/get_next_line.h"
+# include "ft_printf/ft_printf.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
