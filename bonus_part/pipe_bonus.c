@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:21:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/24 11:09:54 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/24 16:38:09 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,16 +115,22 @@ void	here_doc(t_pipe *ptr, int ac, char **av, char **env)
 		
 void	multiple_pipe(t_pipe *ptr, int ac, char **av, char **env)
 {
-	int fd[ac - 3][2];
-	
-	ptr->i = 2;
-	int pid;
-	
-	while (ptr->i < ac - 1)
+	int fd[ac - 3][2]; // ac = 6
+	int pids[ac - 3];
+	int	i;
+
+	i = 0;
+	while (i < ac - 3)
+		pipe(fd[i++]);
+	i = 0;
+	while (i < ac - 3)
 	{
-		pipe(fd[ac - 3]);
-		pid = fork();
-		
+		pids[i] = fork();
+		if (pids[i] == 0)
+		{
+			
+			return ;
+		}
 	}
 }
 
