@@ -9,6 +9,7 @@ OBJ=pipex.o \
 	helped_functions/remove_equal_from_path.o \
 	helped_functions/get_cmd_from_input.o \
 	helped_functions/path_cmd.o \
+	helped_functions/ft_strnstr.o \
 	get_next_line/get_next_line.o \
 	get_next_line/get_next_line_utils.o \
 

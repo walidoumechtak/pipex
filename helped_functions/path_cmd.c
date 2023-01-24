@@ -6,37 +6,49 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:26:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/19 20:27:21 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/24 12:28:21 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-char	*path_cmd(char *str, char *cmd)
+int	index_path(char **env)
 {
-	int i;
-	char **p;
-	char *res;
-	char *removed_equal;
-	char *joined;
-	char *temp;
+	int	i;
 
-	removed_equal = remove_equal_from_path(str);
-	p = ft_split(removed_equal, ':');
 	i = 0;
-	while (p[i])
+	while (env[i])
 	{
-		temp = ft_strjoin(p[i], "/");
-		joined = ft_strjoin(temp, cmd);
-		free(temp);
-		if (access(joined, F_OK) == 0)
-		{
-			res = joined;
-			free_all(p);
-			return (res);
-		}
+		if (ft_strnstr(env[i], "PATH", ft_strlen(env[i])) != NULL)
+			return (i);
 		i++;
 	}
-	free(removed_equal);
-	return (free_all(p), NULL);
+	return (0);
+}
+
+char	*path_cmd(t_pipe *ptr, char **str,char *cmd)
+{
+	int	i;
+
+	i = index_path(str);
+	if (i == 0)
+		return (NULL);
+	ptr->path.removed_equal = remove_equal_from_path(str[i]);
+	ptr->path.p = ft_split(ptr->path.removed_equal, ':');
+	ptr->path.i = 0;
+	while (ptr->path.p[ptr->path.i])
+	{
+		ptr->path.temp = ft_strjoin(ptr->path.p[ptr->path.i], "/");
+		ptr->path.joined = ft_strjoin(ptr->path.temp, cmd);
+		free(ptr->path.temp);
+		if (access(ptr->path.joined, F_OK) == 0)
+		{
+			ptr->path.res = ptr->path.joined;
+			free_all(ptr->path.p);
+			return (ptr->path.res);
+		}
+		ptr->path.i++;
+	}
+	free(ptr->path.removed_equal);
+	return (free_all(ptr->path.p), NULL);
 }

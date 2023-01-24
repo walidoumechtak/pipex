@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:23:03 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/24 11:41:36 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/24 12:25:37 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,16 @@
 # include <time.h>
 # include <unistd.h>
 
+typedef	struct s_path_cmd
+{
+	int i;
+	char **p;
+	char *res;
+	char *removed_equal;
+	char *joined;
+	char *temp;
+}				t_path_cmd;
+
 typedef struct s_pipe
 {
 	int		fd[2];
@@ -37,6 +47,7 @@ typedef struct s_pipe
 	char	*path_cmd2;
 	char	*line;
 	int	i;
+	t_path_cmd	path;
 }			t_pipe;
 
 char		**ft_split(char const *s, char c);
@@ -48,8 +59,9 @@ char		*ft_strcat(char *s1, char *s2);
 void		free_all(char **s);
 char		*remove_equal_from_path(char *str);
 char		**get_cmd_from_input(char *str);
-char		*path_cmd(char *str, char *cmd);
+char		*path_cmd(t_pipe *ptr, char **str, char *cmd);
 void		fd_put_string(char *s, int fd);
 int			ft_strcmp(char *s1, char *s2);
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 
 #endif
