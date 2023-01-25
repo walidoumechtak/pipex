@@ -20,6 +20,7 @@ OBJS=bonus_part/pipe_bonus.o \
 	helped_functions/remove_equal_from_path.o \
 	helped_functions/get_cmd_from_input.o \
 	helped_functions/path_cmd.o \
+	helped_functions/ft_strnstr.o \
 	helped_functions/fd_put_string.o \
 	helped_functions/ft_strcmp.o \
 	get_next_line/get_next_line.o \

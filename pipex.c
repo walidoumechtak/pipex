@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:22:35 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/24 13:20:24 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/25 06:36:58 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ int	main(int ac, char **av, char **env)
 			dup_and_execev(ptr, 1, env);
 		else
 			dup_and_execev(ptr, 2, env);
+		close(ptr->fd[0]);
+		close(ptr->fd[1]);
 		while (wait(NULL) != -1)
 			;
 	}

@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:21:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/24 16:38:09 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/25 10:40:53 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 	{
 		ptr->cmd1 = get_cmd_from_input(av[3]);
 		ptr->cmd2 = get_cmd_from_input(av[4]);
-		ptr->path_cmd1 = path_cmd(env[6], ptr->cmd1[0]);
-		ptr->path_cmd2 = path_cmd(env[6], ptr->cmd2[0]);
+		ptr->path_cmd1 = path_cmd(ptr, env, ptr->cmd1[0]);
+		ptr->path_cmd2 = path_cmd(ptr, env, ptr->cmd2[0]);
 		ptr->fd_outfile = open(av[5], O_WRONLY | O_CREAT | O_APPEND, 0777);
 		ptr->fd_infile = open("temp", O_WRONLY | O_CREAT, 0777);
 		if (ptr->fd_infile == -1 && ac == 6)
@@ -63,8 +63,8 @@ void	dup_and_execev(t_pipe *ptr, int n, char **env)
 
 void	read_here_doc(t_pipe *ptr, char **av, int ac)
 {
-	char **arr;
-	
+	char	**arr;
+
 	write(1, "pipe heredoc> ", 15);
 	ptr->line = get_next_line(0);
 	if (!ptr->line)
@@ -73,7 +73,7 @@ void	read_here_doc(t_pipe *ptr, char **av, int ac)
 	{
 		arr = ft_split(ptr->line, '\n');
 		if (ft_strcmp(arr[0], av[2]) == 0)
-			break;
+			break ;
 		free_all(arr);
 		fd_put_string(ptr->line, ptr->fd_infile);
 		free(ptr->line);
@@ -107,36 +107,49 @@ void	here_doc(t_pipe *ptr, int ac, char **av, char **env)
 }
 // ./pipex here_doc LIMITER cmd cmd1 file
 // cmd << LIMITER | cmd1 >> file
-		ptr->cmd1 = get_cmd_from_input(av[3]);
-		ptr->cmd2 = get_cmd_from_input(av[4]);
-		ptr->path_cmd1 = path_cmd(env[6], ptr->cmd1[0]);
-		ptr->path_cmd2 = path_cmd(env[6], ptr->cmd2[0]);
 
-		
+
+// ptr->cmd1 = get_cmd_from_input(av[3]);
+// ptr->cmd2 = get_cmd_from_input(av[4]);
+// ptr->path_cmd1 = path_cmd(env[6], ptr->cmd1[0]);
+// ptr->path_cmd2 = path_cmd(env[6], ptr->cmd2[0]);
+
 void	multiple_pipe(t_pipe *ptr, int ac, char **av, char **env)
 {
-	int fd[ac - 3][2]; // ac = 6
-	int pids[ac - 3];
+	int fd[2];
+	int pid;
 	int	i;
-
-	i = 0;
-	while (i < ac - 3)
-		pipe(fd[i++]);
-	i = 0;
-	while (i < ac - 3)
+	
+	i = 2;
+	init_struct_elem(ptr, ac, av, env);
+	dup2(ptr->fd_infile, 0);
+	while (i < ac - 1)
 	{
-		pids[i] = fork();
-		if (pids[i] == 0)
+		ptr->cmd1 = get_cmd_from_input(av[i]);
+		ptr->path_cmd1 = path_cmd(ptr, env, ptr->cmd1[0]);
+		pipe(fd);
+		pid = fork();
+		if (pid == 0)
 		{
-			
-			return ;
+			if (i == ac - 2)
+				dup2(ptr->fd_outfile, 1);
+			else
+				dup2(fd[1], 1);
+			execve(ptr->path_cmd1, ptr->cmd1, env);
 		}
+		else
+			dup2(fd[0], 0);
+		close(fd[0]);
+		close(fd[1]);
+		i++;
 	}
+	close(fd[0]);
+	close(fd[1]);
 }
 
 int	main(int ac, char **av, char **env)
 {
-	t_pipe	*ptr;
+	t_pipe *ptr;
 
 	ptr = malloc(sizeof(t_pipe));
 	if (!ptr)
