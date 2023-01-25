@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:21:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/25 10:40:53 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/25 11:50:04 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 		ptr->fd_infile = open("temp", O_WRONLY | O_CREAT, 0777);
 		if (ptr->fd_infile == -1 && ac == 6)
 			ft_perror();
+		
 	}
 	else
 	{
@@ -80,8 +81,26 @@ void	read_here_doc(t_pipe *ptr, char **av, int ac)
 		write(1, "pipe heredoc> ", 15);
 		ptr->line = get_next_line(0);
 	}
-	if (ptr->path_cmd2 == NULL && ac == 6)
-		perror("command not found");
+	(void)ac;
+	// if (ptr->path_cmd2 == NULL && ac == 6)
+	// 	perror("command not found");
+
+	if (ptr->path_cmd2 == NULL && ac == 6) // ==================
+		{
+			ft_printf("commande not found hhhh1: %s\n", ptr->cmd2[0]);
+			if (ptr->path_cmd1 != NULL)
+			{
+				free(ptr);
+				exit(1);
+			}
+		}
+		if (ptr->path_cmd2 == NULL && ptr->path_cmd1 == NULL && ac == 6)
+		{
+			ft_printf("commande not found hhhh2: %s", ptr->cmd1[0]);
+			free(ptr);
+			exit(1);
+		} // =====================
+		
 	free(ptr->line);
 }
 
@@ -105,14 +124,6 @@ void	here_doc(t_pipe *ptr, int ac, char **av, char **env)
 	while (wait(NULL) != -1)
 		;
 }
-// ./pipex here_doc LIMITER cmd cmd1 file
-// cmd << LIMITER | cmd1 >> file
-
-
-// ptr->cmd1 = get_cmd_from_input(av[3]);
-// ptr->cmd2 = get_cmd_from_input(av[4]);
-// ptr->path_cmd1 = path_cmd(env[6], ptr->cmd1[0]);
-// ptr->path_cmd2 = path_cmd(env[6], ptr->cmd2[0]);
 
 void	multiple_pipe(t_pipe *ptr, int ac, char **av, char **env)
 {
@@ -137,8 +148,7 @@ void	multiple_pipe(t_pipe *ptr, int ac, char **av, char **env)
 				dup2(fd[1], 1);
 			execve(ptr->path_cmd1, ptr->cmd1, env);
 		}
-		else
-			dup2(fd[0], 0);
+		dup2(fd[0], 0);
 		close(fd[0]);
 		close(fd[1]);
 		i++;
