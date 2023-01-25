@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:21:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/25 13:07:59 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/25 13:12:34 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ void	ft_perror_fork(void)
 	perror("Failed to create a proccess");
 }
 
+void ft_perror_pipe()
+{
+	perror("failded to Create a pipe");
+}
+
 void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 {
 	if (ft_strcmp(av[1], "here_doc") == 0)
@@ -32,7 +37,7 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 		ptr->path_cmd2 = path_cmd(ptr, env, ptr->cmd2[0]);
 		ptr->fd_outfile = open(av[5], O_WRONLY | O_CREAT | O_APPEND, 0777);
 		ptr->fd_infile = open("temp", O_WRONLY | O_CREAT, 0777);
-		if (ptr->fd_infile == -1 && ac == 6)
+		if ((ptr->fd_infile < 0 || ptr->fd_outfile < 0) && ac == 6)
 			ft_perror_open();
 		
 	}
@@ -138,8 +143,11 @@ void	multiple_pipe(t_pipe *ptr, int ac, char **av, char **env)
 	{
 		ptr->cmd1 = get_cmd_from_input(av[i]);
 		ptr->path_cmd1 = path_cmd(ptr, env, ptr->cmd1[0]);
-		pipe(fd);
+		if(pipe(fd) < 0)
+			ft_perror_pipe();
 		pid = fork();
+		if (pid < 0)
+			ft_perror_fork();
 		if (pid == 0)
 		{
 			if (i == ac - 2)
