@@ -6,16 +6,20 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:21:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/25 11:50:04 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/25 13:07:59 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-void	ft_perror(void)
+void	ft_perror_open(void)
 {
 	perror("Failed to open file");
-	exit(0);
+}
+
+void	ft_perror_fork(void)
+{
+	perror("Failed to create a proccess");
 }
 
 void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
@@ -29,15 +33,15 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 		ptr->fd_outfile = open(av[5], O_WRONLY | O_CREAT | O_APPEND, 0777);
 		ptr->fd_infile = open("temp", O_WRONLY | O_CREAT, 0777);
 		if (ptr->fd_infile == -1 && ac == 6)
-			ft_perror();
+			ft_perror_open();
 		
 	}
 	else
 	{
 		ptr->fd_outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 		ptr->fd_infile = open(av[1], O_RDONLY);
-		if (ptr->fd_infile == -1 && ac > 5)
-			ft_perror();
+		if ((ptr->fd_infile < 0 || ptr->fd_outfile < 0) && ac > 5)
+			ft_perror_open();
 	}
 }
 
@@ -81,13 +85,9 @@ void	read_here_doc(t_pipe *ptr, char **av, int ac)
 		write(1, "pipe heredoc> ", 15);
 		ptr->line = get_next_line(0);
 	}
-	(void)ac;
-	// if (ptr->path_cmd2 == NULL && ac == 6)
-	// 	perror("command not found");
-
 	if (ptr->path_cmd2 == NULL && ac == 6) // ==================
 		{
-			ft_printf("commande not found hhhh1: %s\n", ptr->cmd2[0]);
+			ft_printf("commande not found: %s\n", ptr->cmd2[0]);
 			if (ptr->path_cmd1 != NULL)
 			{
 				free(ptr);
@@ -96,7 +96,7 @@ void	read_here_doc(t_pipe *ptr, char **av, int ac)
 		}
 		if (ptr->path_cmd2 == NULL && ptr->path_cmd1 == NULL && ac == 6)
 		{
-			ft_printf("commande not found hhhh2: %s", ptr->cmd1[0]);
+			ft_printf("commande not found: %s", ptr->cmd1[0]);
 			free(ptr);
 			exit(1);
 		} // =====================
@@ -112,15 +112,15 @@ void	here_doc(t_pipe *ptr, int ac, char **av, char **env)
 	read_here_doc(ptr, av, ac);
 	close(ptr->fd_infile);
 	ptr->fd_infile = open("temp", O_RDONLY);
+	if (ptr->fd_infile < 0)
+		ft_perror_open();
 	ptr->pid = fork();
+	if (ptr->pid < 0)
+		ft_perror_fork();
 	if (ptr->pid == 0)
-	{
 		dup_and_execev(ptr, 1, env);
-	}
 	else
-	{
 		dup_and_execev(ptr, 2, env);
-	}
 	while (wait(NULL) != -1)
 		;
 }
