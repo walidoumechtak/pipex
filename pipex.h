@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:23:03 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/24 12:25:37 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/25 13:36:18 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,10 @@ char		*path_cmd(t_pipe *ptr, char **str, char *cmd);
 void		fd_put_string(char *s, int fd);
 int			ft_strcmp(char *s1, char *s2);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
+
+
+void	ft_perror_fork(void);
+void	ft_perror_open(void);
+void ft_perror_pipe(void);
 
 #endif
