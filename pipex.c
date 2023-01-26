@@ -6,16 +6,16 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 05:27:00 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 06:08:12 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/26 06:54:50 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void    ft_close(t_pipe *ptr, int n)
+void	ft_close(t_pipe *ptr, int n)
 {
-    free(ptr);
-    exit(n);
+	free(ptr);
+	exit(n);
 }
 
 void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
@@ -25,8 +25,10 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 	ptr->path_cmd1 = path_cmd(ptr, env, ptr->cmd1[0]);
 	ptr->path_cmd2 = path_cmd(ptr, env, ptr->cmd2[0]);
 	ptr->fd_outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	ptr->fd_infile = open(av[1], O_RDONLY);
-	if ((ptr->fd_infile < 0 || ptr->fd_outfile < 0) && ac == 5)
+	if (ptr->bonus_int == 0)
+		ptr->fd_infile = open(av[1], O_RDONLY);
+	if ((ptr->fd_outfile < 0 || (ptr->fd_infile < 0 && ptr->bonus_int == 0))
+		&& ac == 5)
 		ft_perror_open();
 	if (ptr->path_cmd2 == NULL && ac == 5)
 	{
@@ -45,57 +47,64 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 	}
 }
 
-void    cmd1(t_pipe *ptr, char **env)
+void	cmd1(t_pipe *ptr, char **env)
 {
-    int pid;
+	int	pid;
 
-    pid = fork();
-    if (pid < 0)
-        ft_close(ptr, 2);
-    if (pid == 0)
-    {
-        close(ptr->fd[0]);
-        dup2(ptr->fd_infile, 0);
-        dup2(ptr->fd[1], 1);
-        execve(ptr->path_cmd1, ptr->cmd1, env);
-    }
+	pid = fork();
+	if (pid < 0)
+		ft_close(ptr, 2);
+	if (pid == 0)
+	{
+		close(ptr->fd[0]);
+		if (ptr->bonus_int == 1)
+			dup2(ptr->fd_temp_file, 0);
+		else
+			dup2(ptr->fd_infile, 0);
+		dup2(ptr->fd[1], 1);
+		execve(ptr->path_cmd1, ptr->cmd1, env);
+	}
 }
 
-void    cmd2(t_pipe *ptr, char **env)
+void	cmd2(t_pipe *ptr, char **env)
 {
-    int pid;
-    
-    pid = fork();
-    if (pid < 0)
-        ft_close(ptr, 2);
-    if (pid == 0)
-    {
-        close(ptr->fd[1]);
-        dup2(ptr->fd[0], 0);
-        dup2(ptr->fd_outfile, 1);
-        execve(ptr->path_cmd2, ptr->cmd2, env);
-    }
-}  
+	int	pid;
 
-int main(int ac, char **av, char **env)
+	pid = fork();
+	if (pid < 0)
+		ft_close(ptr, 2);
+	if (pid == 0)
+	{
+		close(ptr->fd[1]);
+		dup2(ptr->fd[0], 0);
+		dup2(ptr->fd_outfile, 1);
+		if (ptr->bonus_int == 1)
+			unlink("temp");
+		execve(ptr->path_cmd2, ptr->cmd2, env);
+	}
+}
+
+int	main(int ac, char **av, char **env)
 {
-    t_pipe  *ptr;
+	t_pipe *ptr;
 
-    if (ac == 5)
-    {
-        ptr = malloc(sizeof(t_pipe));
-        if (!ptr)
-            return (2);
-        if (pipe(ptr->fd) < 0)
-            ft_close(ptr, 1);
-        init_struct_elem(ptr, ac, av, env);
-        cmd1(ptr, env);
-        cmd2(ptr, env);
-        close(ptr->fd[0]);
-        close(ptr->fd[1]);
-        while (wait(NULL) != -1);    
-    }
-    else
-        ft_printf("too many argement ...\n");
-    return (0);
+	if (ac == 5)
+	{
+		ptr = malloc(sizeof(t_pipe));
+		if (!ptr)
+			return (2);
+		ptr->bonus_int = 0;
+		if (pipe(ptr->fd) < 0)
+			ft_close(ptr, 1);
+		init_struct_elem(ptr, ac, av, env);
+		cmd1(ptr, env);
+		cmd2(ptr, env);
+		close(ptr->fd[0]);
+		close(ptr->fd[1]);
+		while (wait(NULL) != -1)
+			;
+	}
+	else
+		ft_printf("too many argement ...\n");
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:21:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 06:19:45 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/26 06:55:48 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void	read_here_doc(t_pipe *ptr, char **av, int ac)
 {
 	char	**arr;
-
+	
+	(void)ac;
+	ptr->fd_temp_file = open("temp", O_WRONLY | O_CREAT, 0777);
 	write(1, "pipe heredoc> ", 15);
 	ptr->line = get_next_line(0);
 	if (!ptr->line)
@@ -31,47 +33,25 @@ void	read_here_doc(t_pipe *ptr, char **av, int ac)
 		write(1, "pipe heredoc> ", 15);
 		ptr->line = get_next_line(0);
 	}
-	if (ptr->path_cmd2 == NULL && ac == 6) // ==================
-		{
-			ft_printf("commande not found: %s\n", ptr->cmd2[0]);
-			if (ptr->path_cmd1 != NULL)
-			{
-				free(ptr);
-				exit(1);
-			}
-		}
-		if (ptr->path_cmd2 == NULL && ptr->path_cmd1 == NULL && ac == 6)
-		{
-			ft_printf("commande not found: %s", ptr->cmd1[0]);
-			free(ptr);
-			exit(1);
-		} // =====================
-		
 	free(ptr->line);
 }
 
 void	here_doc(t_pipe *ptr, int ac, char **av, char **env)
 {
+	ptr->bonus_int = 1; // to indicate if we can use unlink or not
 	init_struct_elem(ptr, ac, av, env);
 	if (pipe(ptr->fd) < 0)
 		return ;
 	read_here_doc(ptr, av, ac);
-	close(ptr->fd_infile);
-	ptr->fd_infile = open("temp", O_RDONLY);
-	if (ptr->fd_infile < 0)
+	close(ptr->fd_temp_file);
+	ptr->fd_temp_file = open("temp", O_RDONLY);
+	if (ptr->fd_temp_file < 0)
 		ft_perror_open();
-	ptr->pid = fork();
-	if (ptr->pid < 0)
-		ft_perror_fork();
-	if (ptr->pid == 0)
-		dup_and_execev(ptr, 1, env);
-	else
-		dup_and_execev(ptr, 2, env);
+	cmd1(ptr, env);
+	cmd2(ptr, env);
 	while (wait(NULL) != -1)
 		;
 }
-
-
 
 int	main(int ac, char **av, char **env)
 {
