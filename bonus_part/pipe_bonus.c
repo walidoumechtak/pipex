@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:21:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 16:17:53 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/26 20:13:41 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,21 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 		if (ptr->path_cmd1 != NULL)
 		{
 			free(ptr);
-			exit(ptr->pid);
+			exit(127);
 		}
 	}
 	if (ptr->path_cmd2 == NULL && ptr->path_cmd1 == NULL && ac == 5)
 	{
 		ft_printf("commande not found : %s", ptr->cmd1[0]);
 		free(ptr);
-		exit(ptr->pid);
+		exit(127);
 	}
 }
 
-void	read_here_doc(t_pipe *ptr, char **av, int ac)
+void	read_here_doc(t_pipe *ptr, char **av)
 {
 	char	**arr;
 	
-	(void)ac;
 	write(1, "pipe heredoc> ", 15);
 	ptr->line = get_next_line(0);
 	if (!ptr->line)
@@ -68,13 +67,11 @@ void	read_here_doc(t_pipe *ptr, char **av, int ac)
 void	here_doc(t_pipe *ptr, int ac, char **av, char **env)
 {
 	init_struct_elem(ptr, ac, av, env);
-	read_here_doc(ptr, av, ac);
+	read_here_doc(ptr, av);
 	close(ptr->fd_temp_file);
 	ptr->fd_temp_file = open("temp", O_RDONLY);
 	if (ptr->fd_temp_file < 0)
 		ft_perror_open();
-	cmd_bonus_1(ptr, env);
-	cmd_bonus_2(ptr, env);
 }
 
 int	main(int ac, char **av, char **env)
@@ -89,6 +86,11 @@ int	main(int ac, char **av, char **env)
 		if (pipe(ptr->fd) < 0)
 			ft_perror_pipe();
 		here_doc(ptr, ac, av, env);
+		cmd_bonus_1(ptr, env);
+		cmd_bonus_2(ptr, env);
+		close(ptr->fd[0]);
+		close(ptr->fd[1]);
+		while (wait(NULL) != -1);
 	}
 	free(ptr);
 }
