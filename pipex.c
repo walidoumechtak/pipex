@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 05:27:00 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 11:46:07 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/26 13:40:00 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,11 @@ int	main(int ac, char **av, char **env)
 		close(ptr->fd[1]);
 		while (wait(NULL) != -1)
 			;
+		free(ptr->path_cmd1);
+		free(ptr->path_cmd2);
+		free_all(ptr->cmd1);
+		free_all(ptr->cmd2);
+		free(ptr);
 	}
 	else
 		ft_printf("too many argement ...\n");

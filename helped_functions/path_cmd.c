@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:26:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 11:47:05 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/26 13:43:07 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ char	*path_cmd(t_pipe *ptr, char **str, char *cmd)
 		{
 			ptr->path.res = ptr->path.joined;
 			free_all(ptr->path.p);
+			free(ptr->path.removed_equal);
 			return (ptr->path.res);
 		}
 		ptr->path.i++;
