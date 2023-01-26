@@ -6,26 +6,16 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 05:27:00 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 11:34:28 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/26 11:43:20 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	ft_close(t_pipe *ptr, int n)
+void	handle_error(t_pipe *ptr, char **av, int ac)
 {
-	free(ptr);
-	exit(n);
-}
-
-void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
-{
-	ptr->cmd1 = get_cmd_from_input(av[2]);
-	ptr->cmd2 = get_cmd_from_input(av[3]);
-	ptr->path_cmd1 = path_cmd(ptr, env, ptr->cmd1[0]);
-	ptr->path_cmd2 = path_cmd(ptr, env, ptr->cmd2[0]);
-	ptr->fd_outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	ptr->fd_infile = open(av[1], O_RDONLY);
+	if ((ptr->fd_infile < 0) && ac == 5)
+		ft_printf("no such file or directory: %s\n", av[1]);
 	if ((ptr->fd_outfile < 0) && ac == 5)
 		ft_perror_open();
 	if (ptr->path_cmd2 == NULL && ac == 5)
@@ -43,6 +33,17 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 		free(ptr);
 		exit(127);
 	}
+}
+
+void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
+{
+	ptr->cmd1 = get_cmd_from_input(av[2]);
+	ptr->cmd2 = get_cmd_from_input(av[3]);
+	ptr->path_cmd1 = path_cmd(ptr, env, ptr->cmd1[0]);
+	ptr->path_cmd2 = path_cmd(ptr, env, ptr->cmd2[0]);
+	ptr->fd_outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	ptr->fd_infile = open(av[1], O_RDONLY);
+	handle_error(ptr, av, ac);
 }
 
 void	cmd1(t_pipe *ptr, char **env)
@@ -97,7 +98,6 @@ int	main(int ac, char **av, char **env)
 		close(ptr->fd[1]);
 		while (wait(NULL) != -1)
 			;
-		
 	}
 	else
 		ft_printf("too many argement ...\n");
