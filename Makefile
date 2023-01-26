@@ -12,6 +12,7 @@ OBJ=pipex.o \
 	helped_functions/ft_strnstr.o \
 	get_next_line/get_next_line.o \
 	get_next_line/get_next_line_utils.o \
+	errors/errors.o \
 
 OBJS=bonus_part/pipe_bonus.o \
 	helped_functions/ft_split.o \
@@ -25,6 +26,7 @@ OBJS=bonus_part/pipe_bonus.o \
 	helped_functions/ft_strcmp.o \
 	get_next_line/get_next_line.o \
 	get_next_line/get_next_line_utils.o \
+	errors/errors.o \
 
 all:$(NAME)
 

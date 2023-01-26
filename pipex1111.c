@@ -5,18 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/26 05:27:00 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 05:57:04 by woumecht         ###   ########.fr       */
+/*   Created: 2023/01/15 13:22:35 by woumecht          #+#    #+#             */
+/*   Updated: 2023/01/25 13:31:31 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-void    ft_close(t_pipe *ptr, int n)
-{
-    free(ptr);
-    exit(n);
-}
 
 void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 {
@@ -45,51 +39,57 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 	}
 }
 
-void    cmd1(t_pipe *ptr, char **env)
+void	dup_and_execev(t_pipe *ptr, int n, char **env)
 {
-    int pid;
-
-    pid = fork();
-    if (pid < 0)
-        ft_close(ptr, 2);
-    if (pid == 0)
-    {
-        close(ptr->fd[0]);
-        dup2(ptr->fd_infile, 0);
-        dup2(ptr->fd[1], 1);
-        execve(ptr->path_cmd1, ptr->cmd1, env);
-    }
+	if (n == 1)
+	{
+		close(ptr->fd[0]);
+		dup2(ptr->fd_infile, 0);
+		dup2(ptr->fd[1], 1);
+		execve(ptr->path_cmd1, ptr->cmd1, env);
+		close(ptr->fd[1]);
+	}
+	else
+	{
+		close(ptr->fd[1]);
+		dup2(ptr->fd[0], 0);
+		dup2(ptr->fd_outfile, 1);
+		execve(ptr->path_cmd2, ptr->cmd2, env);
+		close(ptr->fd[0]);
+	}
 }
 
-void    cmd2(t_pipe *ptr, char **env)
+void	ft_errors(char *s)
 {
-    int pid;
-    
-    pid = fork();
-    if (pid < 0)
-        ft_close(ptr, 2);
-    if (pid == 0)
-    {
-        close(ptr->fd[1]);
-        dup2(ptr->fd[0], 0);
-        dup2(ptr->fd_outfile, 1);
-        execve(ptr->path_cmd2, ptr->cmd2, env);
-    }
-}  
+	ft_printf("%s\n", s);
+	exit(1);
+}
 
-int main(int ac, char **av, char **env)
+int	main(int ac, char **av, char **env)
 {
-    t_pipe  *ptr;
+	t_pipe	*ptr;
 
-    ptr = malloc(sizeof(t_pipe));
-    if (!ptr)
-        return (2);
-    if (pipe(ptr->fd) < 0)
-        ft_close(ptr, 1);
-    init_struct_elem(ptr, ac, av, env);
-    cmd1(ptr, env);
-    cmd2(ptr, env);
-    close(ptr->fd[0]);
-    close(ptr->fd[1]);
-    while (wait(NULL) != -1);
+	ptr = malloc(sizeof(t_pipe));
+	if (!ptr)
+		return (1);
+	init_struct_elem(ptr, ac, av, env);
+	if (ac == 5)
+	{
+		if (pipe(ptr->fd) < 0)
+			ft_errors("failed to pipe");
+		ptr->pid = fork();
+		if (ptr->pid < 0)
+			ft_errors("failed to fork");
+		if (ptr->pid == 0)
+			dup_and_execev(ptr, 1, env);
+		else
+			dup_and_execev(ptr, 2, env);
+		close(ptr->fd[0]);
+		close(ptr->fd[1]);
+		while (wait(NULL) != -1)
+			;
+	}
+	else
+		write(2, "to many argements !\n", 20);
+	free(ptr);
 }

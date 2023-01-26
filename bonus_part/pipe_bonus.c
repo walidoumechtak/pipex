@@ -6,17 +6,11 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:21:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/25 13:34:27 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/25 15:51:19 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
-
-
-
-
-
-
 
 void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 {
@@ -30,7 +24,6 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 		ptr->fd_infile = open("temp", O_WRONLY | O_CREAT, 0777);
 		if ((ptr->fd_infile < 0 || ptr->fd_outfile < 0) && ac == 6)
 			ft_perror_open();
-		
 	}
 	else
 	{
