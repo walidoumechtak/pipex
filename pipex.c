@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 05:27:00 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 13:40:00 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/26 15:23:17 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,11 @@ void	cmd1(t_pipe *ptr, char **env)
 		close(ptr->fd[0]);
 		if (ptr->fd_infile < 0)
 			exit(0);
+		if (!ptr->path_cmd1)
+		{
+			ft_printf("commande not found : %s\n", ptr->cmd1[0]);
+			exit (0);
+		}
 		dup2(ptr->fd_infile, 0);
 		dup2(ptr->fd[1], 1);
 		execve(ptr->path_cmd1, ptr->cmd1, env);
@@ -98,10 +103,6 @@ int	main(int ac, char **av, char **env)
 		close(ptr->fd[1]);
 		while (wait(NULL) != -1)
 			;
-		free(ptr->path_cmd1);
-		free(ptr->path_cmd2);
-		free_all(ptr->cmd1);
-		free_all(ptr->cmd2);
 		free(ptr);
 	}
 	else
