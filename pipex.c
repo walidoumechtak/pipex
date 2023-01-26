@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 05:27:00 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 05:57:04 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/26 06:08:12 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,21 @@ int main(int ac, char **av, char **env)
 {
     t_pipe  *ptr;
 
-    ptr = malloc(sizeof(t_pipe));
-    if (!ptr)
-        return (2);
-    if (pipe(ptr->fd) < 0)
-        ft_close(ptr, 1);
-    init_struct_elem(ptr, ac, av, env);
-    cmd1(ptr, env);
-    cmd2(ptr, env);
-    close(ptr->fd[0]);
-    close(ptr->fd[1]);
-    while (wait(NULL) != -1);
+    if (ac == 5)
+    {
+        ptr = malloc(sizeof(t_pipe));
+        if (!ptr)
+            return (2);
+        if (pipe(ptr->fd) < 0)
+            ft_close(ptr, 1);
+        init_struct_elem(ptr, ac, av, env);
+        cmd1(ptr, env);
+        cmd2(ptr, env);
+        close(ptr->fd[0]);
+        close(ptr->fd[1]);
+        while (wait(NULL) != -1);    
+    }
+    else
+        ft_printf("too many argement ...\n");
+    return (0);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex1111.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:22:35 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/25 13:31:31 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/26 06:06:27 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 	ptr->path_cmd2 = path_cmd(ptr, env, ptr->cmd2[0]);
 	ptr->fd_outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	ptr->fd_infile = open(av[1], O_RDONLY);
-	if ((ptr->fd_infile < 0 || ptr->fd_outfile < 0) && ac == 5)
+	if ((ptr->fd_outfile < 0 || ptr->fd_infile < 0) && ac == 5)
 		ft_perror_open();
 	if (ptr->path_cmd2 == NULL && ac == 5)
 	{

@@ -10,6 +10,7 @@ OBJ=pipex.o \
 	helped_functions/get_cmd_from_input.o \
 	helped_functions/path_cmd.o \
 	helped_functions/ft_strnstr.o \
+	helped_functions/init_struct_elem.o \
 	get_next_line/get_next_line.o \
 	get_next_line/get_next_line_utils.o \
 	errors/errors.o \
@@ -24,6 +25,7 @@ OBJS=bonus_part/pipe_bonus.o \
 	helped_functions/ft_strnstr.o \
 	helped_functions/fd_put_string.o \
 	helped_functions/ft_strcmp.o \
+	helped_functions/init_struct_elem.o \
 	get_next_line/get_next_line.o \
 	get_next_line/get_next_line_utils.o \
 	errors/errors.o \
@@ -31,7 +33,7 @@ OBJS=bonus_part/pipe_bonus.o \
 all:$(NAME)
 
 $(NAME):$(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) ft_printf/libftprintf.a -o $(NAME) -fsanitize=address
+	$(CC) $(CFLAGS) $(OBJ) ft_printf/libftprintf.a -o $(NAME)
 
 bonus: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) ft_printf/libftprintf.a -o $(NAME)
