@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 05:27:00 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 11:43:20 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/26 11:46:07 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	cmd2(t_pipe *ptr, char **env)
 
 int	main(int ac, char **av, char **env)
 {
-	t_pipe *ptr;
+	t_pipe	*ptr;
 
 	if (ac == 5)
 	{

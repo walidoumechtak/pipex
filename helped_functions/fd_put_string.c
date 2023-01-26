@@ -6,25 +6,25 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 06:42:19 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/23 06:44:32 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/26 11:48:09 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-void    fd_put_char(char c, int fd)
+void	fd_put_char(char c, int fd)
 {
-    write(fd, &c, 1);
+	write(fd, &c, 1);
 }
 
-void    fd_put_string(char *s, int fd)
+void	fd_put_string(char *s, int fd)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (s[i])
-    {
-        fd_put_char(s[i], fd);
-        i++;
-    }
+	i = 0;
+	while (s[i])
+	{
+		fd_put_char(s[i], fd);
+		i++;
+	}
 }

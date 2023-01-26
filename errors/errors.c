@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:34:54 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 11:31:29 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/26 11:47:40 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,9 @@ void	ft_perror_fork(void)
 void	ft_perror_open(void)
 {
 	ft_printf("%s\n", strerror(errno));
-	// perror("Failed to open file");
 }
 
-void ft_perror_pipe(void)
+void	ft_perror_pipe(void)
 {
 	perror("failded to Create a pipe");
 }

@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 10:21:16 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 11:41:45 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/26 11:46:17 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	cmd_bonus_1(t_pipe *ptr, char **env)
 
 void	cmd_bonus_2(t_pipe *ptr, char **env)
 {
-	int pid;
+	int	pid;
 
 	pid = fork();
 	if (pid < 0)
@@ -40,7 +40,7 @@ void	cmd_bonus_2(t_pipe *ptr, char **env)
 		close(ptr->fd[1]);
 		dup2(ptr->fd[0], 0);
 		dup2(ptr->fd_outfile, 1);
-        unlink("temp");
+		unlink("temp");
 		execve(ptr->path_cmd2, ptr->cmd2, env);
 	}
 }
