@@ -6,13 +6,13 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 11:41:09 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/27 10:31:28 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/27 12:39:10 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-void	ft_close()
+void	ft_close(void)
 {
 	ft_printf("permission dinied\n");
 	exit(1);

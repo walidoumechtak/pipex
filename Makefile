@@ -2,6 +2,15 @@ CC=cc
 CFLAGS=-Wall -Wextra -Werror
 NAME=pipex
 
+FOBJ= ft_printf/ft_hexaLower.o \
+	ft_printf/ft_hexaUpper.o \
+	ft_printf/ft_printf.o \
+	ft_printf/ft_printUns.o \
+	ft_printf/ft_putchar.o \
+	ft_printf/ft_putnbr.o \
+	ft_printf/ft_putstr.o \
+	ft_printf/ft_vprintf.o \
+
 OBJ=pipex.o \
 	helped_functions/ft_split.o \
 	helped_functions/ft_substr.o \
@@ -14,6 +23,7 @@ OBJ=pipex.o \
 	get_next_line/get_next_line.o \
 	get_next_line/get_next_line_utils.o \
 	errors/errors.o \
+	$(FOBJ) \
 	
 
 OBJS=bonus_part/pipe_bonus.o \
@@ -31,20 +41,21 @@ OBJS=bonus_part/pipe_bonus.o \
 	get_next_line/get_next_line_utils.o \
 	errors/errors.o \
 	helped_functions/cmds.o \
+	$(FOBJ) \
 	
 all:$(NAME)
 
 $(NAME):$(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) ft_printf/libftprintf.a -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 bonus: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) ft_printf/libftprintf.a -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
-	rm -f $(OBJ) $(OBJS)
+	rm -f $(OBJ) $(OBJS) 
 
 fclean:
-	rm -f $(NAME) $(OBJ) $(OBJS)
+	rm -f $(NAME) $(OBJ) $(OBJS) 
 
 re:fclean all
 

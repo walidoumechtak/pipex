@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:21:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/27 11:08:33 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/27 11:45:14 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,12 @@ void	read_here_doc(t_pipe *ptr, char **av)
 
 void	here_doc(t_pipe *ptr, int ac, char **av, char **env)
 {
+	init_struct_elem(ptr, ac, av, env);
 	if (access(av[5], X_OK) != 0)
 	{
 		ft_printf("permission denied: %s\n", av[5]);
 		exit(0);
 	}
-	init_struct_elem(ptr, ac, av, env);
 	read_here_doc(ptr, av);
 	close(ptr->fd_temp_file);
 	ptr->fd_temp_file = open("temp", O_RDONLY);

@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 05:27:00 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/27 11:06:11 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/27 12:48:06 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,24 @@ void	handle_error(t_pipe *ptr, char **av, int ac)
 
 void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 {
-	if (access(av[1], X_OK) != 0)
-	{
-		ft_printf("permission denied: %s\n", av[1]);
-		exit(0);
-	}
 	if (access(av[4], X_OK) != 0)
 	{
-		ft_printf("permission denied: %s\n", av[4]);
-		exit(0);
+		ft_printf("permission denied :%s\n", av[4]);
+		free(ptr);
+		exit(1);
 	}
 	ptr->cmd1 = get_cmd_from_input(av[2]);
 	ptr->cmd2 = get_cmd_from_input(av[3]);
 	ptr->path_cmd1 = path_cmd(ptr, env, ptr->cmd1[0]);
 	ptr->path_cmd2 = path_cmd(ptr, env, ptr->cmd2[0]);
 	ptr->fd_outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	ptr->fd_infile = open(av[1], O_RDONLY);
+	ptr->fd_infile = open(av[1], O_RDONLY, 0777);
+	if (access(av[1], X_OK) != 0)
+	{
+		ft_printf("permission denied :%s\n", av[1]);
+		free(ptr);
+		exit(1);
+	}
 	handle_error(ptr, av, ac);
 }
 
@@ -67,7 +69,7 @@ void	cmd1(t_pipe *ptr, char **env)
 	{
 		close(ptr->fd[0]);
 		if (ptr->fd_infile < 0)
-			ft_perror_open(ptr);
+			exit(1);
 		if (!ptr->path_cmd1)
 		{
 			ft_printf("commande not found : %s\n", ptr->cmd1[0]);
