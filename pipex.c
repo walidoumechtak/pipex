@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 05:27:00 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/27 05:44:01 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/27 07:55:19 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	handle_error(t_pipe *ptr, char **av, int ac)
 	if ((ptr->fd_infile < 0) && ac == 5)
 		ft_printf("no such file or directory: %s\n", av[1]);
 	if ((ptr->fd_outfile < 0) && ac == 5)
-		ft_perror_open();
+		ft_perror_open(ptr);
 	if (ptr->path_cmd2 == NULL && ac == 5)
 	{
 		ft_printf("commande not found : %s\n", ptr->cmd2[0]);
@@ -65,6 +65,7 @@ void	cmd1(t_pipe *ptr, char **env)
 		}
 		dup2(ptr->fd_infile, 0);
 		dup2(ptr->fd[1], 1);
+		close(ptr->fd[1]);
 		execve(ptr->path_cmd1, ptr->cmd1, env);
 	}
 }
@@ -75,12 +76,13 @@ void	cmd2(t_pipe *ptr, char **env)
 
 	pid = fork();
 	if (pid < 0)
-		ft_close(ptr, 2);
+		ft_perror_fork(ptr);
 	if (pid == 0)
 	{
 		close(ptr->fd[1]);
 		dup2(ptr->fd[0], 0);
 		dup2(ptr->fd_outfile, 1);
+		close(ptr->fd[0]);
 		execve(ptr->path_cmd2, ptr->cmd2, env);
 	}
 }
@@ -95,7 +97,7 @@ int	main(int ac, char **av, char **env)
 		if (!ptr)
 			return (2);
 		if (pipe(ptr->fd) < 0)
-			ft_close(ptr, 1);
+			ft_perror_pipe(ptr);
 		init_struct_elem(ptr, ac, av, env);
 		cmd1(ptr, env);
 		cmd2(ptr, env);
@@ -106,6 +108,6 @@ int	main(int ac, char **av, char **env)
 		free(ptr);
 	}
 	else
-		ft_printf("too many argement ...\n");
+		ft_printf("number of argements is not correct ...\n");
 	return (0);
 }

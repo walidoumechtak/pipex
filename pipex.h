@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:23:03 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 17:45:07 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/27 07:55:04 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ void			cmd_bonus_1(t_pipe *ptr, char **env);
 void			cmd_bonus_2(t_pipe *ptr, char **env);
 void			ft_close(t_pipe *ptr, int n);
 
-void			ft_perror_fork(void);
-void			ft_perror_open(void);
-void			ft_perror_pipe(void);
+void			ft_perror_fork(t_pipe *ptr);
+void			ft_perror_open(t_pipe *ptr);
+void			ft_perror_pipe(t_pipe *ptr);
 
 #endif

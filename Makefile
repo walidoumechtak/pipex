@@ -14,6 +14,7 @@ OBJ=pipex.o \
 	get_next_line/get_next_line.o \
 	get_next_line/get_next_line_utils.o \
 	errors/errors.o \
+	
 
 OBJS=bonus_part/pipe_bonus.o \
 	helped_functions/ft_split.o \
@@ -26,11 +27,11 @@ OBJS=bonus_part/pipe_bonus.o \
 	helped_functions/fd_put_string.o \
 	helped_functions/ft_close.o \
 	helped_functions/ft_strcmp.o \
-	helped_functions/cmds.o \
 	get_next_line/get_next_line.o \
 	get_next_line/get_next_line_utils.o \
 	errors/errors.o \
-
+	helped_functions/cmds.o \
+	
 all:$(NAME)
 
 $(NAME):$(OBJ)
