@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 05:27:00 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/27 09:59:56 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/27 11:06:11 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,16 @@ void	handle_error(t_pipe *ptr, char **av, int ac)
 
 void	init_struct_elem(t_pipe *ptr, int ac, char **av, char **env)
 {
+	if (access(av[1], X_OK) != 0)
+	{
+		ft_printf("permission denied: %s\n", av[1]);
+		exit(0);
+	}
+	if (access(av[4], X_OK) != 0)
+	{
+		ft_printf("permission denied: %s\n", av[4]);
+		exit(0);
+	}
 	ptr->cmd1 = get_cmd_from_input(av[2]);
 	ptr->cmd2 = get_cmd_from_input(av[3]);
 	ptr->path_cmd1 = path_cmd(ptr, env, ptr->cmd1[0]);
@@ -93,6 +103,8 @@ int	main(int ac, char **av, char **env)
 
 	if (ac == 5)
 	{
+		if (av[2][0] == '\0' || av[3][0] == '\0')
+			ft_close();
 		ptr = malloc(sizeof(t_pipe));
 		if (!ptr)
 			return (2);
