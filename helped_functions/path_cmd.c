@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:26:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 14:56:28 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/27 09:29:01 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,12 @@ int	index_path(char **env)
 
 char	*path_cmd(t_pipe *ptr, char **str, char *cmd)
 {
-	int	i;
-
-	i = index_path(str);
-	if (i == 0)
+	ptr->path.index = index_path(str);
+	if (ptr->path.index == 0)
 		return (NULL);
 	if (access(cmd, F_OK) == 0)
 		return (cmd);
-	ptr->path.removed_equal = remove_equal_from_path(str[i]);
+	ptr->path.removed_equal = remove_equal_from_path(str[ptr->path.index]);
 	ptr->path.p = ft_split(ptr->path.removed_equal, ':');
 	ptr->path.i = 0;
 	while (ptr->path.p[ptr->path.i])

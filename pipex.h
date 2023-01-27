@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:23:03 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/27 07:55:04 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/27 09:54:06 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 typedef struct s_path_cmd
 {
 	int			i;
+	int			index;
 	char		**p;
 	char		*res;
 	char		*removed_equal;

@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 05:27:00 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/27 07:55:19 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/27 09:59:56 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,12 @@ void	cmd1(t_pipe *ptr, char **env)
 
 	pid = fork();
 	if (pid < 0)
-		ft_close(ptr, 2);
+		ft_perror_fork(ptr);
 	if (pid == 0)
 	{
 		close(ptr->fd[0]);
 		if (ptr->fd_infile < 0)
-			exit(0);
+			ft_perror_open(ptr);
 		if (!ptr->path_cmd1)
 		{
 			ft_printf("commande not found : %s\n", ptr->cmd1[0]);
