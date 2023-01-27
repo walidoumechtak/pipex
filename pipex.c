@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 05:27:00 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 15:25:23 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/27 05:44:01 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	cmd1(t_pipe *ptr, char **env)
 		if (!ptr->path_cmd1)
 		{
 			ft_printf("commande not found : %s\n", ptr->cmd1[0]);
-			exit(0);
+			exit(127);
 		}
 		dup2(ptr->fd_infile, 0);
 		dup2(ptr->fd[1], 1);

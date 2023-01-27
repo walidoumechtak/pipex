@@ -6,7 +6,7 @@
 /*   By: woumecht <woumecht@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 20:21:25 by woumecht          #+#    #+#             */
-/*   Updated: 2023/01/26 20:13:41 by woumecht         ###   ########.fr       */
+/*   Updated: 2023/01/27 05:31:50 by woumecht         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	main(int ac, char **av, char **env)
 	
 	ptr = malloc(sizeof(t_pipe));
 	if (!ptr)
-		return (1);
+		exit(1);
 	if (ft_strcmp(av[1], "here_doc") == 0 && ac == 6)
 	{
 		if (pipe(ptr->fd) < 0)
